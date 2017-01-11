@@ -1,0 +1,15 @@
+---
+version: '2'
+.catalog:
+  name: "Prometheus-Puppet"
+  version: "v0.1.0-1"
+  description: "Prometheus-Puppet"
+  uuid: prometheus-puppet-0
+  minimum_rancher_version: v1.2.0
+  questions:
+    - variable: "PUPPETDB_SERVICE"
+      label: "PuppetDB"
+      description: "PuppetDB Service"
+      type: "service"
+      default: "puppet/puppetdb"
+      required: true
