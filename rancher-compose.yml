@@ -1,10 +1,10 @@
 ---
 version: '2'
 .catalog:
-  name: "Prometheus-Puppet"
+  name: "Prometheus-PuppetDB"
   version: "v0.1.0-1"
-  description: "Prometheus-Puppet"
-  uuid: prometheus-puppet-0
+  description: "Prometheus-PuppetDB"
+  uuid: prometheus-puppetdb-0
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "PUPPETDB_SERVICE"

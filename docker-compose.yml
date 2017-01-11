@@ -5,7 +5,7 @@ services:
     volumes:
       - /etc/prometheus-config
   prometheus-puppet:
-    image: camptocamp/prometheus-puppet:latest
+    image: camptocamp/prometheus-puppetdb:latest
     volumes_from:
       - prometheus
     external_links:

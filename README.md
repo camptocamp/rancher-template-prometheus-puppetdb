@@ -1,2 +1,2 @@
-# prometheus-puppet
-Rancher template for prometheus-puppet
+# prometheus-puppetdb
+Rancher template for prometheus-puppetdb
