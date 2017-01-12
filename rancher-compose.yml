@@ -2,9 +2,9 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: "v0.1.0-1"
+  version: "v0.3.0-1"
   description: "Prometheus-PuppetDB"
-  uuid: prometheus-puppetdb-0
+  uuid: prometheus-puppetdb-1
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "SSL_CERTIFICATE"
@@ -58,9 +58,18 @@ services:
     scale: 1
     start_on_create: true
     lb_config:
-      default_cert: prometheus.metrics.infra.fsdi.ch
+      certs: []
+      default_cert: ${SSL_CERTIFICATE}
       port_rules:
-        - protocol: https
-          service: prometheus-auth
-          source_port: 9444
-          target_port: 8080
+      - hostname: ''
+        priority: 1
+        protocol: ${PROMETHEUS_SCHEME}
+        service: prometheus-auth
+        source_port: ${PROMETHEUS_PORT}
+        target_port: 8080
+    health_check:
+      healthy_threshold: 2
+      response_timeout: 2000
+      port: 42
+      unhealthy_threshold: 3
+      interval: 2000

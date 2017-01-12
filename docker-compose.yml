@@ -1,61 +1,48 @@
 ---
 version: '2'
+volumes:
+  metrics_tsdb_puppet:
+    external: true
+    driver: 'null'
 services:
-
-  prometheus-server-conf:
-    image: camptocamp/prometheus-puppetdb:latest
-    volumes:
-      - /etc/prometheus-config/
-    labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
-    external_links:
-      - ${PUPPETDB_SERVICE}:puppetdb
-
-  prometheus-server:
-    image: camptocamp/prometheus-server:v1.1.3
-    volumes:
-      - metrics_tsdb_puppet:/prometheus
-    volumes_from:
-      - prometheus-server-conf
-    labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
-      io.rancher.sidekicks: prometheus-server-conf
-      prometheus_port: '9090'
-
   prometheus-auth-conf:
     image: camptocamp/prometheus-auth-conf:v0.1.3
     environment:
-      USERNAME: ${PROMETHEUS_USERNAME}
-      PASSWORD: ${PROMETHEUS_PASSWORD}
       GRAFANA_URL: ${GRAFANA_URL}
+      PASSWORD: ${PROMETHEUS_PASSWORD}
       RESOLVER: 169.254.169.250
+      USERNAME: ${PROMETHEUS_USERNAME}
     volumes:
     - /entrypoint
     - /etc/haproxy
     labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.container.start_once: 'true'
-
   prometheus-auth:
     image: haproxy:1.6-alpine
     entrypoint:
-      - /entrypoint/run.sh
+    - /entrypoint/run.sh
     volumes_from:
-      - prometheus-auth-conf
+    - prometheus-auth-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-auth-conf
-
+  prometheus-server:
+    image: camptocamp/prometheus-server:v1.1.3
+    volumes:
+    - metrics_tsdb_puppet:/prometheus
+    volumes_from:
+    - prometheus-server-conf
+    labels:
+      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.sidekicks: prometheus-server-conf
   prometheus:
     image: rancher/lb-service-haproxy:v0.4.6
-    links:
-      - prometheus-auth:prometheus-auth
     ports:
-      - 9444:9444/tcp
+    - 9443:9443/tcp
     labels:
-      haproxy_stats_id: prometheus
       io.rancher.container.agent.role: environmentAdmin
-      haproxy_stats_port: '8008'
-      io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.container.create_agent: 'true'
-      haproxy_stats_path: /stats
+  prometheus-server-conf:
+    image: camptocamp/prometheus-puppetdb:0.3.0
+    environment:
+      PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
