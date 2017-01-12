@@ -38,7 +38,7 @@ services:
   prometheus:
     image: rancher/lb-service-haproxy:v0.4.6
     ports:
-    - 9443:9443/tcp
+    - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}/tcp
     labels:
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
