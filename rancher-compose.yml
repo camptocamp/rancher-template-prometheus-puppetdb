@@ -7,9 +7,60 @@ version: '2'
   uuid: prometheus-puppetdb-0
   minimum_rancher_version: v1.2.0
   questions:
+    - variable: "SSL_CERTIFICATE"
+      label: "SSL Certificate"
+      description: "A valid certificate from Rancher's infrastructure. Consider using Letsencrypt from the community catalog if you don't have any. The CN must match the 'Prometheus FQDN' below."
+      type: "certificate"
+      required: true
+    - variable: "PROMETHEUS_USERNAME"
+      label: "Prometheus username"
+      description: "Credentials used to access the prometheus API endpoint over HTTP."
+      type: "string"
+      required: true
+    - variable: "PROMETHEUS_PASSWORD"
+      label: "Prometheus password"
+      description: "See Prometheus username"
+      type: "password"
+      required: true
+    - variable: "PROMETHEUS_FQDN"
+      label: "Prometheus FQDN. Must match the CN from the 'SSL Certificate' above."
+      description: "The public FQDN (or IP address) where prometheus can be reached. Leave blank if you don't want this instance to be part of the central federation system."
+      type: "string"
+      required: false
+    - variable: "PROMETHEUS_PORT"
+      label: "Prometheus port"
+      description: "The port used to access prometheus."
+      type: "string"
+      default: "9443"
+      required: true
+    - variable: "PROMETHEUS_SCHEME"
+      label: "Prometheus scheme"
+      description: "Don't change the default unless you know what you're doing."
+      type: "enum"
+      options:
+        - "https"
+        - "http"
+      default: "https"
+    - variable: "GRAFANA_URL"
+      label: "Grafana URL"
+      description: "URL of Grafana instance, which will be added to outgoing CORS headers."
+      type: "string"
+      default: "https://grafana.camptocamp.com"
+      required: true
     - variable: "PUPPETDB_SERVICE"
       label: "PuppetDB"
       description: "PuppetDB Service"
       type: "service"
       default: "puppet/puppetdb"
       required: true
+services:
+  prometheus:
+    scale: 1
+    start_on_create: true
+    lb_config:
+      default_cert: prometheus.metrics.infra.fsdi.ch
+      port_rules:
+        - protocol: https
+          service: prometheus-auth
+          source_port: 9444
+          target_port: 8080
