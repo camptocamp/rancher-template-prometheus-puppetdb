@@ -47,12 +47,6 @@ version: '2'
       type: "string"
       default: "https://grafana.camptocamp.com"
       required: true
-    - variable: "PUPPETDB_SERVICE"
-      label: "PuppetDB"
-      description: "PuppetDB Service"
-      type: "service"
-      default: "puppet/puppetdb"
-      required: true
 services:
   prometheus:
     scale: 1
