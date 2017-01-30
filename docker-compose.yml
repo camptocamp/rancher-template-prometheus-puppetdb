@@ -1,9 +1,7 @@
 ---
 version: '2'
 volumes:
-  metrics_tsdb_puppet:
-    external: true
-    driver: 'null'
+  metrics_tsdb_puppet: {}
 services:
   prometheus-auth-conf:
     image: camptocamp/prometheus-auth-conf:v0.1.3
