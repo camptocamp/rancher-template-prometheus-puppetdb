@@ -43,6 +43,8 @@ services:
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
+    links:
+    - prometheus-auth:prometheus-auth
   prometheus-server-conf:
     image: camptocamp/prometheus-puppetdb:0.4.1
     environment:
