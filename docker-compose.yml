@@ -50,7 +50,7 @@ services:
     links:
     - prometheus-auth:prometheus-auth
   prometheus-server-conf:
-    image: camptocamp/prometheus-puppetdb:0.4.1
+    image: camptocamp/prometheus-puppetdb:0.4.3
     environment:
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
     volumes:
