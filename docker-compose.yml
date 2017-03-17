@@ -27,13 +27,17 @@ services:
       io.rancher.sidekicks: prometheus-auth-conf
   prometheus-server:
     image: camptocamp/prometheus-server:v1.4.1
+    command:
+    - -config.file=/etc/prometheus-config/prometheus.yml
+    - -storage.local.path=/prometheus
+    - -storage.local.max-chunks-to-persist=131072
+    - -storage.local.memory-chunks=262144
+    - -log.format=logger:stdout?json=true
     volumes:
+    - metrics_prom_targets_puppet:/etc/prometheus-targets
     - metrics_tsdb_puppet:/prometheus
-    volumes_from:
-    - prometheus-server-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
-      io.rancher.sidekicks: prometheus-server-conf
       prometheus_port: '9090'
   prometheus:
     image: rancher/lb-service-haproxy:v0.5.9
@@ -49,5 +53,7 @@ services:
     image: camptocamp/prometheus-puppetdb:0.4.1
     environment:
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
+    volumes:
+    - metrics_prom_targets_puppet:/etc/prometheus-targets
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
