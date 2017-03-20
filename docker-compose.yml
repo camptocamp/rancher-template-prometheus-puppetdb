@@ -25,8 +25,10 @@ services:
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-auth-conf
+  prometheus-server-conf:
+    image: camptocamp/prometheus-server-conf:latest
   prometheus-server:
-    image: camptocamp/prometheus-server:v1.4.1
+    image: prom/prometheus:v1.5.2
     command:
     - -config.file=/etc/prometheus-config/prometheus.yml
     - -storage.local.path=/prometheus
@@ -36,8 +38,11 @@ services:
     volumes:
     - metrics_prom_targets_puppet:/etc/prometheus-targets
     - metrics_tsdb_puppet:/prometheus
+    volumes_from:
+    - prometheus-server-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.sidekicks: prometheus-server-conf
       prometheus_port: '9090'
   prometheus:
     image: rancher/lb-service-haproxy:v0.5.9
@@ -49,7 +54,7 @@ services:
       io.rancher.scheduler.affinity:host_label: monitoring=true
     links:
     - prometheus-auth:prometheus-auth
-  prometheus-server-conf:
+  prometheus-puppetdb-targets-conf:
     image: camptocamp/prometheus-puppetdb:0.4.3
     environment:
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
