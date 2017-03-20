@@ -27,6 +27,9 @@ services:
       io.rancher.sidekicks: prometheus-auth-conf
   prometheus-server-conf:
     image: camptocamp/prometheus-server-conf:latest
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.scheduler.affinity:host_label: monitoring=true
   prometheus-server:
     image: prom/prometheus:v1.5.2
     command:
