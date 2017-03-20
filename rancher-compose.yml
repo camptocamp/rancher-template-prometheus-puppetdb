@@ -56,8 +56,7 @@ services:
       certs: []
       default_cert: ${SSL_CERTIFICATE}
       port_rules:
-      - hostname: ''
-        priority: 1
+      - priority: 1
         protocol: ${PROMETHEUS_SCHEME}
         service: prometheus-auth
         source_port: ${PROMETHEUS_PORT}
@@ -68,3 +67,4 @@ services:
       port: 42
       unhealthy_threshold: 3
       interval: 2000
+      strategy: recreate
