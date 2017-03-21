@@ -6,7 +6,7 @@ services:
   alertmanager-conf:
     image: camptocamp/prometheus-alertmanager-conf:20170321-1
     environment:
-      HIPCHAT_ROOM_ID: ${HIPCHAT_ROOMID}
+      HIPCHAT_ROOM_ID: ${HIPCHAT_ROOM_ID}
       HIPCHAT_AUTH_TOKEN: ${HIPCHAT_AUTH_TOKEN}
       HIPCHAT_URL: ${HIPCHAT_URL}
     labels:
