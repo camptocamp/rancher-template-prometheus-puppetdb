@@ -26,7 +26,12 @@ services:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-auth-conf
   prometheus-server-conf:
-    image: camptocamp/prometheus-server-conf:20170320-2
+    image: camptocamp/prometheus-server-conf:20170321-1
+    labels:
+      io.rancher.container.start_once: 'true'
+      io.rancher.scheduler.affinity:host_label: monitoring=true
+  prometheus-server-rules-conf:
+    image: camptocamp/prometheus-server-rules-conf:20170321-1
     labels:
       io.rancher.container.start_once: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
@@ -43,9 +48,11 @@ services:
     - metrics_tsdb_puppet:/prometheus
     volumes_from:
     - prometheus-server-conf
+    - prometheus-server-rules-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-server-conf
+      io.rancher.sidekicks: prometheus-server-rules-conf
       prometheus_port: '9090'
   prometheus:
     image: rancher/lb-service-haproxy:v0.5.9
