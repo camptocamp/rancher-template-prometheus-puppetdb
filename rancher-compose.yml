@@ -2,9 +2,9 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: "v15"
+  version: "v16"
   description: "Prometheus-PuppetDB"
-  uuid: prometheus-puppetdb-15
+  uuid: prometheus-puppetdb-16
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "SSL_CERTIFICATE"
