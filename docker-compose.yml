@@ -18,7 +18,7 @@ services:
     - -log.format=logger:stdout?json=true
     - -log.level=debug
     labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
       io.rancher.sidekicks: alertmanager-conf
     volumes:
     - alertmanager_puppetdb:/alertmanager
@@ -36,7 +36,7 @@ services:
     - /etc/haproxy
     labels:
       io.rancher.container.start_once: 'true'
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
   prometheus-auth:
     image: haproxy:1.6-alpine
     entrypoint:
@@ -44,18 +44,18 @@ services:
     volumes_from:
     - prometheus-auth-conf
     labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
       io.rancher.sidekicks: prometheus-auth-conf
   prometheus-server-conf:
     image: camptocamp/prometheus-server-conf:20170321-1
     labels:
       io.rancher.container.start_once: 'true'
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
   prometheus-server-rules-conf:
     image: camptocamp/prometheus-server-rules-conf:20170322-1
     labels:
       io.rancher.container.start_once: 'true'
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
   prometheus-server:
     image: prom/prometheus:v1.5.2
     command:
@@ -72,7 +72,7 @@ services:
     - prometheus-server-conf
     - prometheus-server-rules-conf
     labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
       io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf
       prometheus_port: '9090'
   prometheus:
@@ -82,7 +82,7 @@ services:
     labels:
       io.rancher.container.agent.role: environmentAdmin
       io.rancher.container.create_agent: 'true'
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
     links:
     - prometheus-auth:prometheus-auth
   prometheus-puppetdb-targets-conf:
@@ -92,4 +92,4 @@ services:
     volumes:
     - metrics_prom_targets_puppet:/etc/prometheus-targets
     labels:
-      io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.scheduler.affinity:host_label: monitoring-puppet=true
