@@ -89,6 +89,7 @@ services:
     image: camptocamp/prometheus-puppetdb:0.4.4
     environment:
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
+      PROMETHEUS_PUPPETDB_QUERY: ${PROMETHEUS_PUPPETDB_QUERY}
     volumes:
     - metrics_prom_targets_puppet:/etc/prometheus-targets
     labels:

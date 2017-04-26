@@ -2,9 +2,9 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: "v17"
+  version: "v18"
   description: "Prometheus-PuppetDB"
-  uuid: prometheus-puppetdb-17
+  uuid: prometheus-puppetdb-18
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "SSL_CERTIFICATE"
@@ -12,6 +12,12 @@ version: '2'
       description: "A valid certificate from Rancher's infrastructure. Consider using Letsencrypt from the community catalog if you don't have any. The CN must match the 'Prometheus FQDN' below."
       type: "certificate"
       required: true
+    - variable: "PROMETHEUS_PUPPETDB_QUERY"
+      label: "PuppetDB query"
+      description: "The PuppetDB PQL query to use to generate target list."
+      type: "string"
+      required: true
+      default: "facts { name='ipaddress' and nodes { deactivated is null and ! (facts { name = 'osfamily' and value = 'RedHat' } and facts { name='operatingsystemmajrelease' and value = '5' }) and facts { name='collectd_version' and value ~ '^5\\\\.7' } and resources { type='Class' and title='Collectd' } } }"
     - variable: "PROMETHEUS_USERNAME"
       label: "Prometheus username"
       description: "Credentials used to access the prometheus API endpoint over HTTP."
