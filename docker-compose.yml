@@ -44,6 +44,8 @@ services:
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-auth-conf
+    links:
+    - prometheus-server:prometheus-server
   prometheus-server-conf:
     image: camptocamp/prometheus-server-conf:20170321-1
     labels:
