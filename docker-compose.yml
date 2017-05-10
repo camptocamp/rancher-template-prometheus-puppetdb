@@ -1,7 +1,5 @@
 ---
 version: '2'
-volumes:
-  metrics_tsdb_puppet: {}
 services:
   alertmanager-conf:
     image: camptocamp/prometheus-alertmanager-conf:20170321-1
