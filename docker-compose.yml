@@ -10,7 +10,7 @@ services:
     labels:
       io.rancher.container.start_once: 'true'
   alertmanager:
-    image: prom/alertmanager:v0.5.1
+    image: prom/alertmanager:v0.6.2
     command:
     - -config.file=/etc/alertmanager/alertmanager.yml
     - -log.format=logger:stdout?json=true
