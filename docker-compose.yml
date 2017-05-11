@@ -82,7 +82,6 @@ services:
     - metrics_tsdb_puppet:/prometheus
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
-      io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf
       prometheus_port: '9090'
   prometheus:
     image: rancher/lb-service-haproxy:v0.5.9
