@@ -84,3 +84,16 @@ services:
       unhealthy_threshold: 3
       interval: 2000
       strategy: recreate
+  prometheus-server:
+    scale: 1
+    start_on_create: true
+    health_check:
+      response_timeout: 2000
+      healthy_threshold: 2
+      port: 9090
+      unhealthy_threshold: 3
+      initializing_timeout: 300000
+      interval: 2000
+      strategy: none
+      request_line: GET "/metrics" "HTTP/1.0"
+      reinitializing_timeout: 300000
