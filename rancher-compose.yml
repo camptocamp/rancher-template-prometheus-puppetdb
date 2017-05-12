@@ -2,9 +2,9 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: "v20"
+  version: "v21"
   description: "Prometheus-PuppetDB"
-  uuid: prometheus-puppetdb-20
+  uuid: prometheus-puppetdb-21
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "SSL_CERTIFICATE"
@@ -70,13 +70,26 @@ services:
     start_on_create: true
     lb_config:
       certs: []
+      config: |-
+        userlist prometheus
+            group prometheus
+            user ${PROMETHEUS_USERNAME} insecure-password ${PROMETHEUS_PASSWORD} groups prometheus
+
+        backend 9444_
+            acl valid_user http_auth(prometheus)
+            http-request auth realm Prometheus if !valid_user
+            http-request deny if METH_POST { path_beg /-/ }
+            acl is_delete method DELETE #Pre-defined ACL METH_DELETE does not exist in haproxy 1.6
+            http-request deny if is_delete
+            rspadd Access-Control-Allow-Origin:\ ${GRAFANA_URL}
+            rspadd Access-Control-Allow-Credentials:\ true
       default_cert: ${SSL_CERTIFICATE}
       port_rules:
       - priority: 1
         protocol: ${PROMETHEUS_SCHEME}
-        service: prometheus-auth
+        service: prometheus-server
         source_port: ${PROMETHEUS_PORT}
-        target_port: 8080
+        target_port: 9090
     health_check:
       healthy_threshold: 2
       response_timeout: 2000
