@@ -49,8 +49,6 @@ services:
     command:
     - -config.file=/etc/prometheus/prometheus.yml
     - -storage.local.path=/prometheus
-    - -storage.local.max-chunks-to-persist=131072
-    - -storage.local.memory-chunks=262144
     - -log.format=logger:stdout?json=true
     - -alertmanager.url=http://alertmanager:9093
     volumes:
