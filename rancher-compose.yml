@@ -4,7 +4,6 @@ version: '2'
   name: "Prometheus-PuppetDB"
   version: "v21"
   description: "Prometheus-PuppetDB"
-  uuid: prometheus-puppetdb-21
   minimum_rancher_version: v1.2.0
   questions:
     - variable: "SSL_CERTIFICATE"
