@@ -53,11 +53,6 @@ version: '2'
       type: "string"
       default: "https://grafana.camptocamp.com"
       required: true
-    - variable: ALERTMANAGER_URL
-      label: Alertmanager URL
-      description: Prometheus Alertmanager url to send alerts to.
-      type: string
-      required: true
 services:
   prometheus:
     scale: 1

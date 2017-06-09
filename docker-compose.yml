@@ -29,7 +29,6 @@ services:
     - -config.file=/etc/prometheus/prometheus.yml
     - -storage.local.path=/prometheus
     - -log.format=logger:stdout?json=true
-    - -alertmanager.url=${ALERTMANAGER_URL}
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
