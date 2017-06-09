@@ -2,7 +2,7 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: "v26"
+  version: "v27"
   description: "Prometheus-PuppetDB"
   minimum_rancher_version: v1.2.0
   questions:
@@ -53,16 +53,11 @@ version: '2'
       type: "string"
       default: "https://grafana.camptocamp.com"
       required: true
-    - variable: HIPCHAT_ROOM_ID
-      label: HipChat Room ID
-      description: The HipChat Room ID.
-      type: int
-    - variable: HIPCHAT_AUTH_TOKEN
-      label: The HipChat auth token.
+    - variable: ALERTMANAGER_URL
+      label: Alertmanager URL
+      description: Prometheus Alertmanager url to send alerts to.
       type: string
-    - variable: HIPCHAT_URL
-      label: The HipChat URL to send API requests to.
-      type: string
+      required: true
 services:
   prometheus:
     scale: 1
