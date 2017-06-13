@@ -44,7 +44,7 @@ services:
       io.rancher.container.create_agent: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
   prometheus-puppetdb-targets-conf:
-    image: camptocamp/prometheus-puppetdb:0.5.1
+    image: camptocamp/prometheus-puppetdb:0.5.2
     environment:
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
       PROMETHEUS_PUPPETDB_QUERY: ${PROMETHEUS_PUPPETDB_QUERY}
