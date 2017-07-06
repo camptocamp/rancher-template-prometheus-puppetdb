@@ -36,7 +36,7 @@ services:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       prometheus_port: '9090'
   prometheus:
-    image: rancher/lb-service-haproxy:v0.5.9
+    image: rancher/lb-service-haproxy:v0.7.5
     ports:
     - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}/tcp
     labels:
