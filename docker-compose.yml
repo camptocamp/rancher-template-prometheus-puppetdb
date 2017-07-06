@@ -24,7 +24,7 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server:
-    image: prom/prometheus:v1.6.2
+    image: prom/prometheus:v1.7.1
     command:
     - -config.file=/etc/prometheus/prometheus.yml
     - -storage.local.path=/prometheus
