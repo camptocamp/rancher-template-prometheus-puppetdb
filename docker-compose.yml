@@ -17,18 +17,18 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server-rules-conf:
-    image: camptocamp/prometheus-server-rules-conf:20170608-1
+    image: camptocamp/prometheus-server-rules-conf:20180213-1
     labels:
       io.rancher.container.start_once: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server:
-    image: prom/prometheus:v1.7.1
+    image: prom/prometheus:v2.1.0
     command:
-    - -config.file=/etc/prometheus/prometheus.yml
-    - -storage.local.path=/prometheus
-    - -log.format=logger:stdout?json=true
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
+    ---web.enable-lifecycle
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
