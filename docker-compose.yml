@@ -28,7 +28,7 @@ services:
     command:
     - --config.file=/etc/prometheus/prometheus.yml
     - --storage.tsdb.path=/prometheus
-    ---web.enable-lifecycle
+    - --web.enable-lifecycle
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
