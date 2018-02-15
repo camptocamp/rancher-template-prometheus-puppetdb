@@ -2,7 +2,7 @@
 version: '2'
 services:
   prometheus-config-merger:
-    image: camptocamp/prometheus-config-merger:0.1.0
+    image: camptocamp/prometheus-config-merger:0.2.0
     environment:
       PROMETHEUS_SERVER_HOSTNAME: prometheus-server
     volumes:
@@ -10,7 +10,7 @@ services:
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
   prometheus-server-conf:
-    image: camptocamp/prometheus-server-conf:20170504-1
+    image: camptocamp/prometheus-server-conf:20170828-1
     labels:
       io.rancher.container.start_once: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
@@ -32,11 +32,14 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
+    volumes_from:
+    - prometheus-server-rules-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
+      io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf, prometheus-config-merger
       prometheus_port: '9090'
   prometheus:
-    image: rancher/lb-service-haproxy:v0.7.5
+    image: rancher/lb-service-haproxy:v0.7.15
     ports:
     - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}/tcp
     labels:
