@@ -2,7 +2,7 @@
 version: '2'
 .catalog:
   name: "Prometheus-PuppetDB"
-  version: v34
+  version: v35
   description: "Prometheus-PuppetDB"
   minimum_rancher_version: v1.2.0
   questions:
