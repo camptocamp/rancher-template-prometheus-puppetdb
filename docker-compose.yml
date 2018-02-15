@@ -36,7 +36,7 @@ services:
     - prometheus-server-rules-conf
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
-      io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf, prometheus-config-merger
+      io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf, prometheus-config-merger, prometheus-puppetdb-targets-conf
       prometheus_port: '9090'
   prometheus:
     image: rancher/lb-service-haproxy:v0.7.15
