@@ -32,6 +32,7 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
+    - prometheus-puppetdb-targets:/etc/prometheus-puppetdb
     volumes_from:
     - prometheus-server-rules-conf
     labels:
@@ -54,7 +55,7 @@ services:
       PROMETHEUS_PUPPETDB_FILE: /etc/prometheus-puppetdb/targets.yml
       PROMETHEUS_PUPPETDB_URL: http://puppetdb.puppet:8080
     volumes:
-      - prometheus-puppetdb-targets:/etc/prometheus-puppetdb
+    - prometheus-puppetdb-targets:/etc/prometheus-puppetdb
     labels:
       io.rancher.scheduler.affinity:host_label: monitoring=true
   prometheus-puppetdb-server-conf:
