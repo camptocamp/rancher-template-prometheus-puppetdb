@@ -17,18 +17,18 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server-rules-conf:
-    image: camptocamp/prometheus-server-rules-conf:20180215-1
+    image: camptocamp/prometheus-custom-rules:r-metrics-20190129-1
+    user: root
+    command:
+    - metrics
     labels:
       io.rancher.container.start_once: 'true'
       io.rancher.scheduler.affinity:host_label: monitoring=true
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server:
-    image: prom/prometheus:v2.1.0
-    command:
-    - --config.file=/etc/prometheus/prometheus.yml
-    - --storage.tsdb.path=/prometheus
-    - --web.enable-lifecycle
+    image: prom/prometheus:v2.7.1
+    command: '--config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.enable-lifecycle --web.enable-admin-api ${PROMETHEUS_EXTRA_PARAMS} --log.format=json'
     volumes:
     - metrics_conf_puppet:/etc/prometheus
     - metrics_tsdb_puppet:/prometheus
@@ -39,17 +39,20 @@ services:
       io.rancher.scheduler.affinity:host_label: monitoring=true
       io.rancher.sidekicks: prometheus-server-conf, prometheus-server-rules-conf, prometheus-config-merger, prometheus-puppetdb, prometheus-puppetdb-server-conf
       prometheus_port: '9090'
+      ssh_tunnel.port: '9090'
   prometheus:
-    image: rancher/lb-service-haproxy:v0.9.1
+    image: rancher/lb-service-haproxy:v0.9.6
     ports:
     - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}/tcp
     labels:
       io.rancher.container.agent.role: environmentAdmin,agent
       io.rancher.container.agent_service.drain_provider: 'true'
       io.rancher.container.create_agent: 'true'
+      io.rancher.container.hostname_override: container_name
       io.rancher.scheduler.affinity:host_label: monitoring=true
+      ssh_tunnel.port: '8008'
   prometheus-puppetdb:
-    image: camptocamp/prometheus-puppetdb:0.9.0
+    image: camptocamp/prometheus-puppetdb:0.9.1
     environment:
       PROMETHEUS_PUPPETDB_OUTPUT: file
       PROMETHEUS_PUPPETDB_FILE: /etc/prometheus-puppetdb/targets.yml

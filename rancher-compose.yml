@@ -8,7 +8,7 @@ version: '2'
   questions:
     - variable: "SSL_CERTIFICATE"
       label: "SSL Certificate"
-      description: "A valid certificate from Rancher's infrastructure. Consider using Letsencrypt from the community catalog if you don't have any. The CN must match the 'Prometheus FQDN' below."
+      description: "A valid certificate from Rancher's infrastructure. Consider using Letsencrypt from the community catalog if you don't have any."
       type: "certificate"
       required: true
     - variable: "PROMETHEUS_USERNAME"
@@ -22,11 +22,6 @@ version: '2'
       description: "See Prometheus username"
       type: "password"
       required: true
-    - variable: "PROMETHEUS_FQDN"
-      label: "Prometheus FQDN. Must match the CN from the 'SSL Certificate' above."
-      description: "The public FQDN (or IP address) where prometheus can be reached. Leave blank if you don't want this instance to be part of the central federation system."
-      type: "string"
-      required: false
     - variable: "PROMETHEUS_PORT"
       label: "Prometheus port"
       description: "The port used to access prometheus."
@@ -41,12 +36,13 @@ version: '2'
         - "https"
         - "http"
       default: "https"
-    - variable: "GRAFANA_URL"
-      label: "Grafana URL"
-      description: "URL of Grafana instance, which will be added to outgoing CORS headers."
+    - variable: "PROMETHEUS_EXTRA_PARAMS"
+      label: "Prometheus custom parameters"
+      description: "Non-default prometheus command-line parameters"
       type: "string"
-      default: "https://grafana.camptocamp.com"
-      required: true
+      default: ""
+      required: false
+
 services:
   prometheus:
     scale: 1
@@ -54,17 +50,33 @@ services:
     lb_config:
       certs: []
       config: |-
+        global
+            log /var/lib/haproxy/dev/log local2 debug
+            log /dev/log                 local2 debug
+            stats socket /run/haproxy/admin.sock mode 660 level admin
+
+        defaults
+            log       global
+            mode      http
+            option    httplog
+            log-tag   haproxy-promssl
+
+        listen stats
+            bind *:8008
+            stats enable
+            stats uri /stats
+
         userlist prometheus
             group prometheus
             user ${PROMETHEUS_USERNAME} insecure-password ${PROMETHEUS_PASSWORD} groups prometheus
 
-        backend 9444_
+        backend ${PROMETHEUS_PORT}_
             acl valid_user http_auth(prometheus)
             http-request auth realm Prometheus if !valid_user
             http-request deny if METH_POST { path_beg /-/ }
-            acl is_delete method DELETE #Pre-defined ACL METH_DELETE does not exist in haproxy 1.6
-            http-request deny if is_delete
-            rspadd Access-Control-Allow-Origin:\ ${GRAFANA_URL}
+            http-request deny if { path_beg /api/v2/admin }
+            http-request deny if METH_DELETE
+            rspadd Access-Control-Allow-Origin:\ *
             rspadd Access-Control-Allow-Credentials:\ true
       default_cert: ${SSL_CERTIFICATE}
       port_rules:
@@ -91,5 +103,5 @@ services:
       initializing_timeout: 300000
       interval: 2000
       strategy: none
-      request_line: GET "/metrics" "HTTP/1.0"
+      request_line: GET "/-/healthy" "HTTP/1.0"
       reinitializing_timeout: 300000
