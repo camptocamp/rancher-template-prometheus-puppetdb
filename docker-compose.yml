@@ -41,7 +41,7 @@ services:
       prometheus_port: '9090'
       ssh_tunnel.port: '9090'
   prometheus:
-    image: rancher/lb-service-haproxy:v0.9.6
+    image: rancher/lb-service-haproxy:v0.9.11
     ports:
     - ${PROMETHEUS_PORT}:${PROMETHEUS_PORT}/tcp
     labels:
