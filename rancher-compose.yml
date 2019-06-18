@@ -6,6 +6,12 @@ version: '2'
   description: "Prometheus-PuppetDB"
   minimum_rancher_version: v1.2.0
   questions:
+    - variable: "SERVER_RULES_CONF_IMAGE"
+      label: "Server rules conf image"
+      description: "Image to use for prometheus-server-rules-conf service"
+      type: "string"
+      default: "camptocamp/prometheus-custom-rules:r-metrics-20190618-2"
+      required: true
     - variable: "SSL_CERTIFICATE"
       label: "SSL Certificate"
       description: "A valid certificate from Rancher's infrastructure. Consider using Letsencrypt from the community catalog if you don't have any."

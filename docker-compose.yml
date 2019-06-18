@@ -17,7 +17,7 @@ services:
     volumes:
     - metrics_conf_puppet:/etc/prometheus
   prometheus-server-rules-conf:
-    image: camptocamp/prometheus-custom-rules:r-metrics-20190618-1
+    image: ${SERVER_RULES_CONF_IMAGE}
     user: root
     command:
     - metrics
